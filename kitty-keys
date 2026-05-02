@@ -1,0 +1,187 @@
+#!/usr/bin/env bash
+# Kitty Terminal Keyboard Shortcuts Cheatsheet
+
+BOLD='\033[1m'
+RESET='\033[0m'
+CYAN='\033[36m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+
+KEY_WIDTH=24
+filter="${1:-}"
+filter_lower=$(echo "$filter" | tr '[:upper:]' '[:lower:]')
+any_match=0
+
+keyline() {
+    printf "  ${YELLOW}%-${KEY_WIDTH}s${RESET} %s\n" "$1" "$2"
+}
+
+matches_filter() {
+    local title="$1"
+    if [[ -z "$filter_lower" ]]; then
+        return 0
+    fi
+    local title_lower
+    title_lower=$(echo "$title" | tr '[:upper:]' '[:lower:]')
+    [[ "$title_lower" == *"$filter_lower"* ]]
+}
+
+print_header() {
+    echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════════════╗${RESET}"
+    echo -e "${BOLD}${CYAN}║           Kitty Terminal Keyboard Shortcuts                  ║${RESET}"
+    echo -e "${BOLD}${CYAN}╚══════════════════════════════════════════════════════════════╝${RESET}"
+    echo ""
+}
+
+sec_copy() {
+    local title="📋 复制与粘贴 (Copy & Paste)"
+    matches_filter "$title" || return
+    any_match=1
+    echo -e "${BOLD}${GREEN}${title}${RESET}"
+    keyline "Ctrl+Shift+C"          "复制到剪贴板"
+    keyline "Ctrl+Shift+V"          "从剪贴板粘贴"
+    keyline "Ctrl+Shift+S"          "从选择区域粘贴"
+    keyline "Ctrl+Shift+O"          "将选择内容传递给程序"
+    echo ""
+}
+
+sec_scroll() {
+    local title="📜 滚动与浏览 (Scrolling)"
+    matches_filter "$title" || return
+    any_match=1
+    echo -e "${BOLD}${GREEN}${title}${RESET}"
+    keyline "Ctrl+Shift+Up"         "向上滚动一行"
+    keyline "Ctrl+Shift+Down"       "向下滚动一行"
+    keyline "Ctrl+Shift+PageUp"     "向上滚动一页"
+    keyline "Ctrl+Shift+PageDown"   "向下滚动一页"
+    keyline "Ctrl+Shift+Home"       "滚动到顶部"
+    keyline "Ctrl+Shift+End"        "滚动到底部"
+    keyline "Ctrl+Shift+H"          "在 less 中浏览回滚内容"
+    keyline "Ctrl+Shift+G"          "浏览上一条命令的输出"
+    keyline "Ctrl+Shift+Z"          "跳转到上一个 shell 提示符"
+    keyline "Ctrl+Shift+X"          "跳转到下一个 shell 提示符"
+    echo ""
+}
+
+sec_window() {
+    local title="🪟 窗口管理 (Windows)"
+    matches_filter "$title" || return
+    any_match=1
+    echo -e "${BOLD}${GREEN}${title}${RESET}"
+    keyline "Ctrl+Shift+Enter"      "新建窗口"
+    keyline "Ctrl+Shift+N"          "新建 OS 窗口"
+    keyline "Ctrl+Shift+W"          "关闭窗口"
+    keyline "Ctrl+Shift+]"          "下一个窗口"
+    keyline "Ctrl+Shift+["          "上一个窗口"
+    keyline "Ctrl+Shift+F"          "窗口前移"
+    keyline "Ctrl+Shift+B"          "窗口后移"
+    keyline "Ctrl+Shift+\`"         "窗口移到顶部"
+    keyline "Ctrl+Shift+F7"         "可视化聚焦窗口"
+    keyline "Ctrl+Shift+F8"         "可视化交换窗口"
+    keyline "Ctrl+Shift+1..0"       "聚焦到指定窗口"
+    echo ""
+}
+
+sec_tab() {
+    local title="📑 标签页管理 (Tabs)"
+    matches_filter "$title" || return
+    any_match=1
+    echo -e "${BOLD}${GREEN}${title}${RESET}"
+    keyline "Ctrl+Shift+T"          "新建标签页"
+    keyline "Ctrl+Shift+Q"          "关闭标签页"
+    keyline "Ctrl+Shift+Right"      "下一个标签页"
+    keyline "Ctrl+Shift+Left"       "上一个标签页"
+    keyline "Ctrl+Shift+L"          "下一个布局"
+    keyline "Ctrl+Shift+."          "标签页前移"
+    keyline "Ctrl+Shift+,"          "标签页后移"
+    keyline "Ctrl+Shift+Alt+T"      "设置标签页标题"
+    echo ""
+}
+
+sec_font() {
+    local title="🔤 字体调整 (Font)"
+    matches_filter "$title" || return
+    any_match=1
+    echo -e "${BOLD}${GREEN}${title}${RESET}"
+    keyline "Ctrl+Shift+="          "增大字体"
+    keyline "Ctrl+Shift+-"          "减小字体"
+    keyline "Ctrl+Shift+Backspace"  "恢复默认字体"
+    echo ""
+}
+
+sec_misc() {
+    local title="⚙️  配置与其他 (Config & Misc)"
+    matches_filter "$title" || return
+    any_match=1
+    echo -e "${BOLD}${GREEN}${title}${RESET}"
+    keyline "Ctrl+Shift+F1"         "在浏览器中查看 kitty 文档"
+    keyline "Ctrl+Shift+F2"         "编辑 kitty 配置文件"
+    keyline "Ctrl+Shift+F5"         "重新加载 kitty 配置"
+    keyline "Ctrl+Shift+F6"         "调试 kitty 配置"
+    keyline "Ctrl+Shift+F10"        "切换最大化"
+    keyline "Ctrl+Shift+F11"        "切换全屏"
+    keyline "Ctrl+Shift+Delete"     "重置终端"
+    keyline "Ctrl+Shift+Esc"        "打开 kitty shell"
+    keyline "Ctrl+Shift+U"          "输入 Unicode 字符"
+    keyline "Ctrl+Shift+E"          "用键盘打开 URL"
+    keyline "Ctrl+Shift+Alt+I"      "增加背景透明度"
+    keyline "Ctrl+Shift+Alt+D"      "降低背景透明度"
+    keyline "Ctrl+Shift+Alt+R"      "重置背景透明度"
+    echo ""
+}
+
+sec_hints() {
+    local title="🔍 选择器 (Hints / Pickers)"
+    matches_filter "$title" || return
+    any_match=1
+    echo -e "${BOLD}${GREEN}${title}${RESET}"
+    keyline "Ctrl+Shift+P > F"      "插入选中的路径"
+    keyline "Ctrl+Shift+P > Shift+F" "打开选中的路径"
+    keyline "Ctrl+Shift+P > L"      "插入选中的行"
+    keyline "Ctrl+Shift+P > W"      "插入选中的词"
+    keyline "Ctrl+Shift+P > H"      "插入选中的 hash"
+    keyline "Ctrl+Shift+P > N"      "打开选中的文件(到行)"
+    keyline "Ctrl+Shift+P > Y"      "打开选中的超链接"
+    echo ""
+}
+
+main() {
+    if [[ "$filter_lower" == "list" ]]; then
+        echo -e "${BOLD}${CYAN}Kitty 快捷键可过滤分类列表${RESET}"
+        echo ""
+        echo -e "  ${YELLOW}copy / paste${RESET}      📋 复制与粘贴 (Copy & Paste)"
+        echo -e "  ${YELLOW}scroll${RESET}            📜 滚动与浏览 (Scrolling)"
+        echo -e "  ${YELLOW}window / win${RESET}      🪟 窗口管理 (Windows)"
+        echo -e "  ${YELLOW}tab / tabs${RESET}        📑 标签页管理 (Tabs)"
+        echo -e "  ${YELLOW}font${RESET}              🔤 字体调整 (Font)"
+        echo -e "  ${YELLOW}config / misc${RESET}     ⚙️  配置与其他 (Config & Misc)"
+        echo -e "  ${YELLOW}hints / picker${RESET}    🔍 选择器 (Hints / Pickers)"
+        echo ""
+        echo -e "用法: ${CYAN}kitty-keys <过滤词>${RESET}  （例如: kitty-keys tab）"
+        return
+    fi
+
+    print_header
+    sec_copy
+    sec_scroll
+    sec_window
+    sec_tab
+    sec_font
+    sec_misc
+    sec_hints
+
+    if [[ -n "$filter" && "$any_match" -eq 0 ]]; then
+        echo -e "${YELLOW}未找到匹配 \"${filter}\" 的快捷键分类。${RESET}"
+        echo ""
+        echo -e "可尝试的过滤词示例："
+        echo -e "  ${CYAN}copy${RESET}    → 复制与粘贴"
+        echo -e "  ${CYAN}scroll${RESET}  → 滚动与浏览"
+        echo -e "  ${CYAN}window${RESET}  → 窗口管理"
+        echo -e "  ${CYAN}tab${RESET}     → 标签页管理"
+        echo -e "  ${CYAN}font${RESET}    → 字体调整"
+        echo -e "  ${CYAN}misc${RESET}    → 配置与其他"
+        echo -e "  ${CYAN}hints${RESET}   → 选择器"
+    fi
+}
+
+main
